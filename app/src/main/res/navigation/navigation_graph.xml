@@ -7,5 +7,13 @@
     <fragment
         android:id="@+id/topAnimeListFragment"
         android:name="com.alkeshapp.anibinge.ui.fragements.TopAnimeListFragment"
-        android:label="TopAnimeListFragment" />
+        android:label="TopAnimeListFragment" >
+        <action
+            android:id="@+id/action_topAnimeListFragment_to_animeDetailsFragment"
+            app:destination="@id/animeDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/animeDetailsFragment"
+        android:name="com.alkeshapp.anibinge.ui.fragements.AnimeDetailsFragment"
+        android:label="AnimeDetailsFragment" />
 </navigation>

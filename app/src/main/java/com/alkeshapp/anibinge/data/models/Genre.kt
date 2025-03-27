@@ -1,9 +1,9 @@
-package com.alkeshapp.anibinge.data
+package com.alkeshapp.anibinge.data.models
 
 
 import com.google.gson.annotations.SerializedName
 
-data class Producer(
+data class Genre(
     @SerializedName("mal_id")
     val malId: Int?,
     @SerializedName("name")

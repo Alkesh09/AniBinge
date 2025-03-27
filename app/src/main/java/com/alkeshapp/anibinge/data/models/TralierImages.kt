@@ -1,9 +1,9 @@
-package com.alkeshapp.anibinge.data
+package com.alkeshapp.anibinge.data.models
 
 
 import com.google.gson.annotations.SerializedName
 
-data class ImagesX(
+data class TralierImages(
     @SerializedName("image_url")
     val imageUrl: String?,
     @SerializedName("large_image_url")

@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 
 class TopAnimeAdapter(
     private val animeList: List<AnimeObject>,
+    private val listener: OnAnimeItemClickListener
 ) : RecyclerView.Adapter<TopAnimeAdapter.TopAnimeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TopAnimeViewHolder(
@@ -36,13 +37,18 @@ class TopAnimeAdapter(
         return animeList.size
     }
 
+    interface OnAnimeItemClickListener{
+        fun onAnimeItemClick(animeId: Int)
+    }
+
     inner class TopAnimeViewHolder(val binding: TopAnimeLayoutBinding) : ViewHolder(binding.root),
         View.OnClickListener {
         init {
             binding.animeCard.setOnClickListener(this)
         }
         override fun onClick(p0: View?) {
-
+            val position = adapterPosition
+            listener.onAnimeItemClick(animeList.get(position).malId ?: 0)
         }
 
     }
