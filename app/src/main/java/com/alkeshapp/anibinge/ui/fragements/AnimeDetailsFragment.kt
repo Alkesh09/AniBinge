@@ -1,35 +1,29 @@
 package com.alkeshapp.anibinge.ui.fragements
 
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.ui.PlayerView
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.alkeshapp.anibinge.R
 import com.alkeshapp.anibinge.databinding.FragmentAnimeDetailsBinding
-import com.alkeshapp.anibinge.databinding.FragmentTopAnimeListBinding
-import com.alkeshapp.anibinge.ui.adapters.TopAnimeAdapter
 import com.alkeshapp.anibinge.ui.viewmodel.AnimeViewModel
 import com.alkeshapp.anibinge.utils.Status
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AnimeDetailsFragment : Fragment() {
     private var animeId: Int? = null
     private lateinit var binding: FragmentAnimeDetailsBinding
-    private var player: ExoPlayer? = null
-    private lateinit var playerView: PlayerView
+//    private var player: ExoPlayer? = null
+//    private lateinit var playerView: PlayerView
     private val viewModel: AnimeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,34 +45,27 @@ class AnimeDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getAnimeDetails(animeId ?: 0)
         animeDetailObserver()
+        lifecycle.addObserver(binding.videoPlayer)
+
         binding.IVposter.setOnClickListener {
             binding.IVposter.visibility = View.GONE
-            player?.play()
+//            player?.play()
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        player?.release()
-        player = null
+        binding.videoPlayer.release()
+//        player?.release()
+//        player = null
     }
 
-    private fun createPlayer(uri: String){
-        player = ExoPlayer.Builder(requireContext()).build().apply {
-            val mediaItem = MediaItem.fromUri(Uri.parse(uri))
-            setMediaItem(mediaItem)
-            prepare()
-            playWhenReady = true
-            addListener(object : Player.Listener {
-                override fun onPlaybackStateChanged(playbackState: Int) {
-                    if (playbackState == ExoPlayer.STATE_READY) {
-                        binding.IVposter.visibility = View.GONE
-                    }
-                }
-            })
-        }
-
-        binding.videoPlayer.player = player
+    private fun createPlayer(videoId: String){
+        binding.videoPlayer.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                youTubePlayer.loadVideo(videoId, 0f)
+            }
+        })
     }
 
     private fun animeDetailObserver() {
@@ -88,9 +75,11 @@ class AnimeDetailsFragment : Fragment() {
                     val anime = result.data?.AnimeObject
                     val genres = anime?.genres?.map { g -> g.name } ?: listOf()
                     addGenres(genres)
-                    if(anime?.trailer?.url.isNullOrBlank()){
+                    if(anime?.trailer?.youtubeId.isNullOrBlank()){
                         Glide.with(requireContext()).load(anime?.trailer?.images?.largeImageUrl).into(binding.IVposter)
                         binding.IVposter.visibility = View.VISIBLE
+                    }else{
+                        createPlayer( anime?.trailer?.youtubeId ?: "")
                     }
                     binding.title.text = anime?.title
                     binding.synopsisText.text = anime?.synopsis
@@ -98,7 +87,7 @@ class AnimeDetailsFragment : Fragment() {
                     binding.synopsisTitle.text = context?.getString(R.string.plot)
                     binding.noOfEpisodes.text = "Episodes \n ${anime?.episodes}"
                     binding.rating.text = "Rating \n ${anime?.score}"
-                    createPlayer(anime?.trailer?.url ?: "")
+
                     binding.progressBar.visibility = View.GONE
                 }
                 Status.ERROR -> {
