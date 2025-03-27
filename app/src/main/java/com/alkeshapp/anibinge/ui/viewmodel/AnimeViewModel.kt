@@ -28,12 +28,16 @@ class AnimeViewModel @Inject constructor(
     val _animeDetailLiveData: LiveData<FlowResponse<AnimeDetailsResponse>> =
         animeDetailLiveData
 
+    var isDataLoaded = false
 
     fun getTopAnimeList() {
         viewModelScope.launch {
             getTopAnimeUseCase.invoke().collect { result ->
                 val response = when (result) {
-                    is FlowResult.Success -> FlowResponse.success(result.data)
+                    is FlowResult.Success ->{
+                        isDataLoaded = true
+                        FlowResponse.success(result.data)
+                    }
                     is FlowResult.Failure -> FlowResponse.error(result.msg)
                     is FlowResult.Loading -> FlowResponse.loading()
                 }

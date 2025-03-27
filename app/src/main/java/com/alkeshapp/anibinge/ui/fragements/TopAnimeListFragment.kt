@@ -29,7 +29,8 @@ class TopAnimeListFragment : Fragment(), TopAnimeAdapter.OnAnimeItemClickListene
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_top_anime_list, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_top_anime_list, container, false)
         return binding.root
     }
 
@@ -41,12 +42,13 @@ class TopAnimeListFragment : Fragment(), TopAnimeAdapter.OnAnimeItemClickListene
     }
 
     private fun topAnimeListObserver() {
-        viewModel._topAnimeResponseLiveData.observe(viewLifecycleOwner){ result ->
-            when(result.status){
+        viewModel._topAnimeResponseLiveData.observe(viewLifecycleOwner) { result ->
+            when (result.status) {
                 Status.SUCCESS -> {
                     val animeList = result.data?.animeList ?: listOf()
                     val adapter = TopAnimeAdapter(animeList, this)
-                    val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                    val layoutManager =
+                        LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                     binding.rvTopAnime.layoutManager = layoutManager
                     binding.rvTopAnime.adapter = adapter
                     binding.progressBar.visibility = View.GONE
@@ -55,7 +57,8 @@ class TopAnimeListFragment : Fragment(), TopAnimeAdapter.OnAnimeItemClickListene
                     binding.progressBar.visibility = View.GONE
                 }
                 Status.LOADING -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    if(!viewModel.isDataLoaded)
+                        binding.progressBar.visibility = View.VISIBLE
                 }
             }
         }

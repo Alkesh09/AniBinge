@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-    </data>
+    <data></data>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -18,16 +17,26 @@
             android:padding="16dp"
             tools:context=".ui.fragments.AnimeDetailsFragment">
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <androidx.media3.ui.PlayerView
                 android:id="@+id/videoPlayer"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
-                android:background="@color/orange_black"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/demo_poster"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:show_buffering="when_playing"
+                app:use_controller="true" />
+
+            <ImageView
+                android:id="@+id/IVposter"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:background="@android:color/black"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/title"
@@ -35,67 +44,69 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/roboto_bold"
-                android:text="Sousou no Frieren"
+                android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/videoPlayer"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/videoPlayer" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/llOfShowInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
                 android:layout_marginTop="12dp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:gravity="center"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title">
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/noOfEpisodes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAlignment="center"
                     android:fontFamily="@font/roboto_black"
-                    android:text="Episodes \n 100"
+                    android:text=""
+                    android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/rating"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAlignment="center"
                     android:fontFamily="@font/roboto_black"
-                    android:text="Rating \n 8.8"
+                    android:text=""
+                    android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/genereTitle"
+                android:id="@+id/genreTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/roboto_medium"
-                android:text="Genres"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/llOfShowInfo"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llOfShowInfo" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroupGenres"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/genereTitle"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/genreTitle" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/synopsisTitle"
@@ -103,12 +114,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/roboto_medium"
-                android:text="Synopsis"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/chipGroupGenres"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/chipGroupGenres" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/synopsisText"
@@ -117,26 +128,28 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/roboto_regular"
                 android:lineSpacingExtra="4dp"
-                android:text="During their decade-long quest to defeat the Demon King, the members of the hero's party—Himmel himself, the priest Heiter, the dwarf warrior Eisen, and the elven mage Frieren—forge bonds through adventures and battles..."
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/synopsisTitle"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/synopsisTitle" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyleLarge"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:indeterminate="true"/>
+                app:layout_constraintTop_toTopOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.core.widget.NestedScrollView>
 
