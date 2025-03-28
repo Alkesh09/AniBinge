@@ -11,3 +11,5 @@ Features:
 Limitations:
 1. The anime details API does not provide cast information, so it is not displayed in the UI.
 2. The trailer links retrieved from the API are YouTube URLs, which are not supported by ExoPlayer. To resolve this, the android-youtube-player library was integrated for video playback.
+
+APP Link- [Download APK](https://drive.google.com/file/d/1NDQjRP3ZdpDqacsJWx_DGFaP5iNSziPy/view?usp=sharing)
